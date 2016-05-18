@@ -33,8 +33,6 @@ const params = {
     buildnum : program.buildnum
 }
 
-
-
 var downloadArtifacts = (filepath) => (artifacts) => {
     var downloads = [];
     if(!filepath){
@@ -42,7 +40,7 @@ var downloadArtifacts = (filepath) => (artifacts) => {
     }
     artifacts.map((artifact) => {
         if(artifact.path.startsWith(filepath)){
-            downloads.push(downloadArtifact(artifact.url, artifact.path.substring(filepath.length)))
+            downloads.push(downloadArtifact(artifact.url, `.${artifact.path.substring(filepath.length)}`))
         }
     });
     return Promise.all(downloads);
