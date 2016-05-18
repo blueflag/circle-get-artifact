@@ -6,7 +6,7 @@ var mkdirp = require('mkdirp');
 var path = require('path');
 
 program
-    .version('0.0.7')
+    .version('0.0.8')
     .option('-t, --token [value]', '(Required) CircleCI Authentication Token')
     .option('-b, --buildnum <n>', 'Specify a build number, or we take latest', parseInt)
     .option('-u, --user [value]', '(Required) Build git repository username')
@@ -21,7 +21,7 @@ if(!program.user || !program.project || !program.token){
     console.log(program.user, program.project);
     program.help(); 
 }
-var outputdir = program.outputdir || '.';
+var outputdir = program.outputdir || './';
 var buildnum = program.buildnum; 
 const ci = new CircleCI({
   auth: program.token
