@@ -1,6 +1,5 @@
 # circle-get-artifact
-Get artifacts from Circle CI
-
+Get all artifacts from a Circle CI build or a subpath `path` and place them in a local directory `outputdir`
 
 ## Usage
 
@@ -17,6 +16,7 @@ Get artifacts from Circle CI
     -p, --project [value]  (Required) Build git repository project
     --branch [value]       Branch to get builds from
     --path [value]         Path of files to download
+    --outputdir [value]    path of local output directory output artifacts defaults to .
 
 ```
 
