@@ -1,0 +1,16 @@
+{
+  "name": "circle-get-artifact",
+  "version": "0.0.1",
+  "description": "Gets artifacts from circle ci.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Esson",
+  "license": "ISC",
+  "dependencies": {
+    "circleci": "^0.3.1",
+    "commander": "^2.9.0",
+    "mkdirp": "^0.5.1"
+  }
+}
