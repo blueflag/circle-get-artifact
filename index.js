@@ -13,6 +13,7 @@ program
     .option('-p, --project [value]', '(Required) Build git repository project')
     .option('--branch [value]', 'Branch to get builds from')
     .option('--path [value]', 'Path of files to download')
+    .option('--outputdir [value]', 'path of local output directory output artifacts defaults to .')
 program.parse(process.argv);
 //check for required params
 
@@ -20,7 +21,7 @@ if(!program.user || !program.project || !program.token){
     console.log(program.user, program.project);
     program.help(); 
 }
-
+var outputdir = program.outputdir || '.';
 var buildnum = program.buildnum; 
 const ci = new CircleCI({
   auth: program.token
@@ -40,7 +41,7 @@ var downloadArtifacts = (filepath) => (artifacts) => {
     }
     artifacts.map((artifact) => {
         if(artifact.path.startsWith(filepath)){
-            downloads.push(downloadArtifact(artifact.url, `.${artifact.path.substring(filepath.length)}`))
+            downloads.push(downloadArtifact(artifact.url, `${outputdir}${artifact.path.substring(filepath.length)}`))
         }
     });
     return Promise.all(downloads);
