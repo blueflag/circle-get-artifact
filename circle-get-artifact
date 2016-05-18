@@ -5,4 +5,4 @@ var path = require('path');
 var fs = require('fs');
 var dirpath = path.join(path.dirname(fs.realpathSync(__filename)));
 
-require(dirpath+'/index.js').convert()
+require(dirpath+'/index.js')
