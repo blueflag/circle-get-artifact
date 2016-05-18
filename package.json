@@ -9,6 +9,10 @@
   "bin": {
     "circle-get-artifact": "circle-get-artifact"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/blueflag/circle-get-artifact.git"
+  },
   "author": "Paul Esson",
   "license": "ISC",
   "dependencies": {
