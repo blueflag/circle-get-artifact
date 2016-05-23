@@ -1,5 +1,5 @@
 # circle-get-artifact
-Get all artifacts from a Circle CI build or a subpath `path` and place them in a local directory `outputdir`
+Get all artifacts from the most recent successful Circle CI build or a subpath `path` from the artifacts and places them in a local directory `outputdir`
 
 ## Usage
 
