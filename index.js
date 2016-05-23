@@ -13,9 +13,15 @@ program
     .option('-p, --project [value]', '(Required) Build git repository project')
     .option('--branch [value]', 'Branch to get builds from')
     .option('--path [value]', 'Path of files to download')
-    .option('--outputdir [value]', 'path of local output directory output artifacts defaults to .')
+    .option('--outputdir [value]', 'path of local output directory output artifacts defaults to "./"')
+    .option('--config [value]', 'specify a json config')
 program.parse(process.argv);
 //check for required params
+
+if(program.config){
+    var config = require(path.resolve(process.cwd(), program.config));
+    console.log(config);
+}
 
 if(!program.user || !program.project || !program.token){
     console.log(program.user, program.project);
@@ -66,12 +72,14 @@ function downloadArtifact(artifactUrl, filepath){
     })
 }
 
-function getBuildArticats(params){
-    return ci.getBuildArtifacts({
-        username: params.user,
-        project: params.project,
-        build_num: params.buildnum
-    })
+function getBuildArtifacts(params) {
+    return  (build_num) =>{
+        return ci.getBuildArtifacts({
+            username: params.user,
+            project: params.project,
+            build_num: build_num
+        })
+    }
 }
 
 function resolveBuildNumber(params){
@@ -82,13 +90,22 @@ function resolveBuildNumber(params){
     }
 }
 
+function latestSuccess(builds){
+    return new Promise((resolve, reject) => {
+        var i = 0;
+        for(i =0; i < builds.length; i++){
+            if(builds[i].lifecycle === 'finished' && builds[i].outcome === 'success'){
+                return resolve(builds[i].build_num);
+            }
+        }
+        return reject('No valid builds found');
+    })
+}
+
 function findLatestBuild(params){
     var paramsReturn = params;
     if(!params.branch){
-        return ci.getBuilds({username: params.user, project: params.project}).then((builds)=>{
-            paramsReturn.buildnum = builds[0].build_num;
-            return Promise.resolve(paramsReturn);
-        })
+        return ci.getBuilds({username: params.user, project: params.project}).then(latestSuccess);
     } else {
         return ci.getBranchBuilds({username: params.user, project: params.project, branch: params.branch}).then((builds)=>{
             paramsReturn.buildnum = builds[0].build_num;
@@ -99,7 +116,7 @@ function findLatestBuild(params){
 
 
 resolveBuildNumber(params)
-    .then(getBuildArticats)
+    .then(getBuildArtifacts(params))
     .then(downloadArtifacts(program.path))
     .then((files)=>{
         console.log(`Finished wrote ${files.length} files`);
