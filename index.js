@@ -86,7 +86,7 @@ function resolveBuildNumber(params){
     if(typeof(params.buildnum) !== 'number'){
         return findLatestBuild(params);
     } else {
-        return Promise.resolve(params);
+        return Promise.resolve(params.buildnum);
     }
 }
 
