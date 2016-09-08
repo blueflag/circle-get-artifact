@@ -37,7 +37,8 @@ const params = {
     user : program.user,
     project : program.project,
     token: program.token,
-    buildnum : program.buildnum
+    buildnum : program.buildnum,
+    branch: program.branch
 }
 
 var downloadArtifacts = (filepath) => (artifacts) => {
@@ -107,10 +108,7 @@ function findLatestBuild(params){
     if(!params.branch){
         return ci.getBuilds({username: params.user, project: params.project}).then(latestSuccess);
     } else {
-        return ci.getBranchBuilds({username: params.user, project: params.project, branch: params.branch}).then((builds)=>{
-            paramsReturn.buildnum = builds[0].build_num;
-            return Promise.resolve(paramsReturn);
-        });
+        return ci.getBranchBuilds({username: params.user, project: params.project, branch: params.branch}).then(latestSuccess)
     }
 }
 
