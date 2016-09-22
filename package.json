@@ -1,6 +1,6 @@
 {
   "name": "circle-get-artifact",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Gets artifacts from circle ci.",
   "main": "index.js",
   "scripts": {
