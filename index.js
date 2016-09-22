@@ -15,6 +15,7 @@ program
     .option('--path [value]', 'Path of files to download')
     .option('--outputdir [value]', 'path of local output directory output artifacts defaults to "./"')
     .option('--config [value]', 'specify a json config')
+    .option('--print-paths', 'print file paths')
 program.parse(process.argv);
 //check for required params
 
@@ -33,12 +34,15 @@ const ci = new CircleCI({
   auth: program.token
 });
 
+//console.log(program)
+
 const params = {
     user : program.user,
     project : program.project,
     token: program.token,
     buildnum : program.buildnum,
-    branch: program.branch
+    branch: program.branch,
+    printPaths: program.printPaths
 }
 
 var downloadArtifacts = (filepath) => (artifacts) => {
@@ -66,7 +70,9 @@ function downloadArtifact(artifactUrl, filepath){
                 response.pipe(file);
             });
             file.on('close', ()=>{
-                console.log(filepath);
+                if(params.printPaths){
+                    console.log(filepath);
+                }
                 return resolve(filepath);
             })
         });
@@ -87,7 +93,7 @@ function resolveBuildNumber(params){
     if(typeof(params.buildnum) !== 'number'){
         return findLatestBuild(params);
     } else {
-        return Promise.resolve(params);
+        return Promise.resolve(params.buildnum);
     }
 }
 
@@ -114,6 +120,10 @@ function findLatestBuild(params){
 
 
 resolveBuildNumber(params)
+    .then((buildNumber) => {
+        console.log("Downloading Build", buildNumber);
+        return buildNumber;
+     })
     .then(getBuildArtifacts(params))
     .then(downloadArtifacts(program.path))
     .then((files)=>{
