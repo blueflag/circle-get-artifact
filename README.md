@@ -22,7 +22,9 @@ Circle get artifact can be installed using NPM.
     -p, --project [value]  (Required) Build git repository project
     --branch [value]       Branch to get builds from
     --path [value]         Path of files to download
-    --outputdir [value]    path of local output directory output artifacts defaults to .
+    --outputdir [value]    path of local output directory output artifacts defaults to "./"
+    --config [value]       specify a json config
+    --print-paths          print file paths
 
 ```
 

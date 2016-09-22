@@ -25,16 +25,15 @@ if(program.config){
 }
 
 if(!program.user || !program.project || !program.token){
-    console.log(program.user, program.project);
     program.help(); 
 }
+
 var outputdir = program.outputdir || './';
 var buildnum = program.buildnum; 
 const ci = new CircleCI({
   auth: program.token
 });
 
-//console.log(program)
 
 const params = {
     user : program.user,
