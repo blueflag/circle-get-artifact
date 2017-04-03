@@ -79,11 +79,11 @@ function downloadArtifact(artifactUrl, filepath){
 }
 
 function getBuildArtifacts(params) {
-    return  (build_num) =>{
+    return  (build) =>{
         return ci.getBuildArtifacts({
             username: params.user,
             project: params.project,
-            build_num: build_num
+            build_num: build.build_num
         })
     }
 }
@@ -92,7 +92,7 @@ function resolveBuildNumber(params){
     if(typeof(params.buildnum) !== 'number'){
         return findLatestBuild(params);
     } else {
-        return Promise.resolve(params.buildnum);
+        return ci.getBuild({username: params.user, project: params.project, build_num: params.buildnum})
     }
 }
 
@@ -101,7 +101,7 @@ function latestSuccess(builds){
         var i = 0;
         for(i =0; i < builds.length; i++){
             if(builds[i].lifecycle === 'finished' && builds[i].outcome === 'success'){
-                return resolve(builds[i].build_num);
+                return resolve(builds[i]);
             }
         }
         return reject('No valid builds found');
@@ -118,10 +118,11 @@ function findLatestBuild(params){
 }
 
 
+
 resolveBuildNumber(params)
-    .then((buildNumber) => {
-        console.log("Downloading Build", buildNumber);
-        return buildNumber;
+    .then((build) => {
+        console.log(`Download Build ${build.build_num} - ${build.vcs_url}/commit/${build.vcs_revision} queued ${build.queued_at}`)
+        return build;
      })
     .then(getBuildArtifacts(params))
     .then(downloadArtifacts(program.path))
